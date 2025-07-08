@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: "InfoStorage"
+app:
+  data:
+    mainURI: "redis://app-link:uy#6zRti2ZCFv^jfK^k8Eiep@pavuk.mrbag.org/4"
