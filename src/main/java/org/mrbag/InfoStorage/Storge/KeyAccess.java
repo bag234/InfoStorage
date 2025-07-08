@@ -1,23 +1,22 @@
 package org.mrbag.InfoStorage.Storge;
 
+import org.mrbag.InfoStorage.Util.AppInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class KeyAccess {
 
-	@NonNull
 	String password;
 	
 	String id;
 	
 	public boolean canStore() {
-		return id.isEmpty();
+		return id == null ||id.isEmpty();
 	}
 	
 	public boolean isValid() {
@@ -33,7 +32,7 @@ public class KeyAccess {
 	
 	@Override
 	public String toString() {
-		return String.format("data:%s@%s", id, password);
+		return String.format("%s:%s@%s",AppInfo.getHeader(), id, password);
 	}
 	
 }

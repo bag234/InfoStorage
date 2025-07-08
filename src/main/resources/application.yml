@@ -2,5 +2,6 @@ spring:
   application:
     name: "InfoStorage"
 app:
+  header: "data"
   data:
-    mainURI: "redis://app-link:uy#6zRti2ZCFv^jfK^k8Eiep@pavuk.mrbag.org/4"
+    mainURI: "redis://app-link:4Kmvz8ZyDi!bhP7v@pavuk.mrbag.org:9091/0"

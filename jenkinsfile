@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'Runnable', credentialsId: '9ef5277f-8146-4070-863e-73936eab46e7', url: 'git@github.com:bag234/Convert.git'
+                git branch: 'Runnable', credentialsId: '9ef5277f-8146-4070-863e-73936eab46e7', url: 'git@github.com:bag234/InfoStorage.git'
             }
         }
         stage('Build') {

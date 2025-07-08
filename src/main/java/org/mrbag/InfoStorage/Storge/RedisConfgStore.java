@@ -31,6 +31,7 @@ public class RedisConfgStore {
 	}
 	
 	@Bean(name = "StandartClientConfig")
+	@Deprecated
 	public LettuceClientConfiguration configConnect() {
 		return LettuceClientConfiguration.builder().useSsl().and()
 				.commandTimeout(Duration.ofSeconds(4)).build();
@@ -39,7 +40,7 @@ public class RedisConfgStore {
 	@Bean(name= "mainConnect")
 	public ReactiveRedisConnectionFactory configFactory(
 			RedisStandaloneConfiguration uri, LettuceClientConfiguration config) {
-		return new LettuceConnectionFactory(uri, config);
+		return new LettuceConnectionFactory(uri);
 	}
 	
 	@Bean(name = "primaryTemplate")
