@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    environment {
+        // SSH server configured in Jenkins
+        SSH_SERVER = "pavuk-ssh"
+        JAR_FILE = "target/*.jar"
+        REMOTE_DIR = "micro"
+        SERVICE_NAME = "java-infoserv.service"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'Runnable', credentialsId: '9ef5277f-8146-4070-863e-73936eab46e7', url: 'git@github.com:bag234/Convert.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "${SSH_SERVER}",
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: "${JAR_FILE}",
+                                    removePrefix: "target",
+                                    remoteDirectory: "${REMOTE_DIR}",
+                                    execCommand: """
+                                        sudo systemctl stop ${SERVICE_NAME} || true
+                                        sudo systemctl start ${SERVICE_NAME} || sudo systemctl restart ${SERVICE_NAME}
+                                    """
+                                )
+                            ],
+                            usePromotionTimestamp: false,
+                            useWorkspaceInPromotion: false,
+                            verbose: true
+                        )
+                    ]
+                )
+            }
+        }
+    }
+
+    post {
+        success {
+            slackSend channel: '#deployments', message: "✅ SUCCESS: Spring Boot app deployed to ${SSH_SERVER}"
+        }
+        failure {
+            slackSend channel: '#deployments', message: "❌ FAILED: Deployment failed (${env.JOB_NAME})"
+        }
+    }
+}
