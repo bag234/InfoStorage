@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // SSH server configured in Jenkins
-        SSH_SERVER = "pavuk-ssh"
+        SSH_SERVER = "by-ssh"
         JAR_FILE = "target/*.jar"
         REMOTE_DIR = "micro"
         SERVICE_NAME = "java-infoserv.service"

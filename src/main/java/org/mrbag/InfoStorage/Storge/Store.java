@@ -20,6 +20,9 @@ public class Store {
 		if(password == null || data == null || password.isEmpty() || data.isEmpty()) 
 			throw new NullPointerException("Data is empty");
 		KeyAccess key = KeyAccess.builder().password(password).build().generateId();
+		
+		while(canExit(key)) key.generateId();
+		
 		primaryTemplate.opsForValue().set(key.toString(), data).block();
 		
 		return key;
