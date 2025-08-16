@@ -3,5 +3,7 @@ spring:
     name: "InfoStorage"
 app:
   header: "data"
+  cloud: "store"
+  freaz-tag: "freaz"
   data:
-    mainURI: "redis://app-link:4Kmvz8ZyDi!bhP7v@pavuk.mrbag.org:9091/0"
+    mainURI: "redis://app-user:1234@192.168.1.78:6380/1"
