@@ -29,7 +29,7 @@ public class Store {
 	}
 	
 	public String load(KeyAccess key) {
-		if (key == null ) return "";
+		if (key == null ) throw new NullPointerException("Key must not null");
 		return primaryTemplate.opsForValue().get(key.toString()).block();
 	}
 	

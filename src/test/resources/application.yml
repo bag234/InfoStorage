@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: "InfoStorage"
+app:
+  header: "data-test"
+  cloud: "store-test"
+  freaz-tag: "freaz"
+  data:
+    mainURI: "redis://172.24.121.136:6379/13"

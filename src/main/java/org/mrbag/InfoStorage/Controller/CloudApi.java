@@ -1,9 +1,10 @@
 package org.mrbag.InfoStorage.Controller;
 
 import org.mrbag.InfoStorage.Storge.Cloud.Cloud;
-import org.mrbag.InfoStorage.Storge.Cloud.CloudKeyAccess;
 import org.mrbag.InfoStorage.Storge.Cloud.TypeAccessPassword;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,40 +26,66 @@ public class CloudApi {
 	@Autowired
 	Cloud cloud;
 	
-	@PostMapping("/upload")
-	public String saveCloudNote(
-			@RequestParam(name = "password", required = false, defaultValue = "") String password,
-			@RequestParam(name = "single", required = false, defaultValue = "no") String canSingle, 
-			@RequestParam(name = "type", required = false, defaultValue = "NONE") String type,
-			@RequestParam(name = "days", required = false, defaultValue = "365") String days,
-			@RequestBody String date
-			) {
+	private static TypeAccessPassword simpleParsingType(boolean canPass, String type) {
 		TypeAccessPassword t = TypeAccessPassword.NONE;
-		if (!password.isEmpty() && type.equals("NONE"))
+		if (canPass && type.equals("NONE"))
 			t = TypeAccessPassword.ANOTHER;
 		else 
-			t = TypeAccessPassword.valueOf(type);
+			t = TypeAccessPassword.valueOf(type.toUpperCase());
+		return t;
+	}
+	
+	@PostMapping("/upload")
+	public ResponseEntity<?> saveCloudNote(
+			@RequestParam(name = "password", required = false, defaultValue = "") String password,
+			@RequestParam(name = "single", required = false, defaultValue = "false") boolean canSingle, 
+			@RequestParam(name = "type", required = false, defaultValue = "NONE") String type,
+			@RequestParam(name = "days", required = false, defaultValue = "365") int days,
+			@RequestBody String date
+			) {
+		try {
+			return ResponseEntity.ok(cloud.save(date,password, canSingle, simpleParsingType(!password.isEmpty(), type), days).getKey());
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 		
-		return cloud.save(date,password, canSingle.equals("true"), t, days).getKey();
+		
 	}
 	
 	@PatchMapping("/{id}")
-	public CloudKeyAccess getInfo(@PathVariable("id") String token) {
-		return cloud.checkInfoKey(token);
+	public ResponseEntity<?> getInfo(@PathVariable("id") String token) {
+		try {
+			return ResponseEntity.ok( cloud.checkInfoKey(token));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
 	@GetMapping("/{id}")
-	public String getCloudNote(
+	public ResponseEntity<String> getCloudNote(
 			@RequestParam(name = "password", required = false, defaultValue = "") String password,
 			@RequestParam(name = "type", required = false, defaultValue = "NONE") String type,
 			@PathVariable("id") String token
 			) {
-		TypeAccessPassword t = TypeAccessPassword.NONE;
-		if (!password.isEmpty() && type.equals("NONE"))
-			t = TypeAccessPassword.ANOTHER;
-		else 
-			t = TypeAccessPassword.valueOf(type);
-		return cloud.getDataFromAlias(token, password, t);
+		
+		try {
+			return ResponseEntity.ok(cloud.getDataFromAlias(token, password, simpleParsingType(!password.isEmpty(), type)));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteCloudNote(
+			@RequestParam(name = "password", required = false, defaultValue = "") String password,
+			@RequestParam(name = "type", required = false, defaultValue = "NONE") String type,
+			@PathVariable("id") String token
+			) {
+		
+		if (cloud.delete(token, password, simpleParsingType(!password.isEmpty(), type)))
+			return ResponseEntity.ok().build();
+		else 
+			return ResponseEntity.notFound().build();
+	}
+
 }

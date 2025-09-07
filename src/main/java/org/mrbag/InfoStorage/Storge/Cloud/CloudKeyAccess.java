@@ -38,7 +38,7 @@ public class CloudKeyAccess {
 		return String.format("%s:%s@%s://%s/%s/valid", 
 				AppInfo.getCloudHeader(), key, password, type, time.toString());
 	}
-	
+	//XXX check coreect using
 	public String keyAlias() {
 		return "alias:" + key;
 	}
