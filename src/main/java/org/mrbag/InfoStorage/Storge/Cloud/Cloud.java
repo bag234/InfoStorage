@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class Cloud {
 
 	@Autowired
@@ -23,13 +26,18 @@ public class Cloud {
 
 	public CloudKeyAccess save(
 			String data, String password,
-			boolean isSingle, TypeAccessPassword type, int days) throws Exception {
+			boolean isSingle, TypeAccessPassword type, int days) throws CloudExceptionProcess {
 		if (data == null || data.isBlank() || data.isEmpty() || days < -1)
-			throw new Exception("Data must not be null or days must not be less than 0");
+			throw new CloudExceptionProcess("Data must not be null or days must not be less than 0");
 
 		String token;
-
+		int i = 0; 
 		do {
+			if (i++ > 25) {
+				log.warn("Wrong key generation process");
+				throw new CloudExceptionProcess("Wrong Key generator, try latter;");
+			}
+				
 			token = SimpleCodeGenerator.generateInt();
 		} while (!canFreeAlias(token));
 
@@ -59,23 +67,32 @@ public class Cloud {
 				return false;
 			}
 			return true;
-		} catch (Exception e) {}
+		} catch (CloudExceptionProcess e) {}
 		return false;
 	}
 
-	public CloudKeyAccess checkInfoKey(String key) throws Exception {
-		if (key == null || key.isBlank() || !canExit(key))
-			throw new Exception("Key must not be null or Blank");
+	public CloudKeyAccess checkInfoKey(String key) throws CloudExceptionProcess {
+		
+		try {
+			if (key == null || key.isBlank())
+				throw new CloudExceptionProcess("Key must not be null or Blank");
+			if (!canExit(key))
+				 return null;
+			CloudKeyAccess data = CloudKeyAccess.parse(primaryTemplate.opsForValue().get("alias:" + key).block());
+			if (data.getTime().isBefore(LocalDateTime.now())) {
+				primaryTemplate.opsForValue().delete("alias:" + key).block();
+				return null;
+			}
 
-		CloudKeyAccess data = CloudKeyAccess.parse(primaryTemplate.opsForValue().get("alias:" + key).block());
-
-		if (data.getTime().isBefore(LocalDateTime.now())) {
-			primaryTemplate.opsForValue().delete("alias:" + key).block();
-			return null;
+			return data;
 		}
-
-		return data;
-
+		catch (CloudExceptionProcess e ) {
+			throw e;
+		}
+		catch (Exception e) {
+			log.error("App Store error message: ", e);
+			throw e;
+		}
 	}
 	
 	public String load(CloudKeyAccess key) {
@@ -93,15 +110,15 @@ public class Cloud {
 			
 			primaryTemplate.opsForValue().delete("alias:" + token).block();
 			return true;
-		} catch (Exception e) {}
+		} catch (CloudExceptionProcess e) {}
 		return false;
 	}
 
 	public String getDataFromAlias(
-			String token, String password, TypeAccessPassword type) throws Exception {
+			String token, String password, TypeAccessPassword type) throws CloudExceptionProcess {
 		CloudKeyAccess key = checkInfoKey(token);
 		if (key == null || key.getType() != type || !password.equals(password))
-			throw new Exception("Key must not be null or key creditals must be correct");
+			throw new CloudExceptionProcess("Key must not be null or key creditals must be correct");
 		
 		String data = load(key);
 

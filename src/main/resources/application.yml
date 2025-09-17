@@ -6,4 +6,4 @@ app:
   cloud: "store"
   freaz-tag: "freaz"
   data:
-    mainURI: "redis://app-user:1234@192.168.1.78:6380/1"
+    mainURI: "redis://172.24.121.136:6379/1"
