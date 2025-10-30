@@ -31,11 +31,10 @@ pipeline {
                             configName: "${SSH_SERVER}",
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "nginx.conf*",
+                                    sourceFiles: "nginx.conf",
                                     remoteDirectory: "${REMOTE_DIR}",
-                                    remoteFileName: "${CONF_NAME}",
                                     execCommand: """
-                                    mv ~/${REMOTE_DIR}/${CONF_NAME} /etc/nginx/sites-available/${CONF_NAME} && \
+                                    mv ~/${REMOTE_DIR}/nginx.conf /etc/nginx/sites-available/${CONF_NAME} && \
                                     ln -sf /etc/nginx/sites-available/${CONF_NAME} /etc/nginx/sites-enabled/${CONF_NAME} && \
                                     sudo nginx -t && sudo nginx -s reload
                                 """
