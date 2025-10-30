@@ -31,7 +31,7 @@ pipeline {
                             configName: "${SSH_SERVER}",
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "nginx.conf",
+                                    sourceFiles: "nginx.conf*",
                                     remoteDirectory: "${REMOTE_DIR}",
                                     remoteFileName: "${CONF_NAME}",
                                     execCommand: """
