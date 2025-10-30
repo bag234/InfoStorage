@@ -33,7 +33,7 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: "nginx.conf",
                                     remoteDirectory: "${REMOTE_DIR}",
-                                    remoteName: "${CONF_NAME}",
+                                    remoteFileName: "${CONF_NAME}",
                                     execCommand: """
                                     mv ~/${REMOTE_DIR}/${CONF_NAME} /etc/nginx/sites-available/${CONF_NAME} && \
                                     ln -sf /etc/nginx/sites-available/${CONF_NAME} /etc/nginx/sites-enabled/${CONF_NAME} && \
