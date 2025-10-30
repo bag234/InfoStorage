@@ -7,6 +7,7 @@ pipeline {
         JAR_FILE = "target/*.jar"
         REMOTE_DIR = "micro"
         SERVICE_NAME = "java-infoserv.service"
+        CONF_NAME = "contacts.conf"
     }
 
     stages {
@@ -20,13 +21,25 @@ pipeline {
                 sh 'mvn clean package -DskipTests'
             }
         }
-        stage('Deploy') {
+
+
+        stage('Deploy & nginx conf transfer & Restart Service') {
             steps {
                 sshPublisher(
                     publishers: [
                         sshPublisherDesc(
                             configName: "${SSH_SERVER}",
                             transfers: [
+                                sshTransfer(
+                                    sourceFiles: "nginx.conf",
+                                    remoteDirectory: "${REMOTE_DIR}",
+                                    remoteName: "${CONF_NAME}",
+                                    execCommand: """
+                                    mv ~/${REMOTE_DIR}/${CONF_NAME} /etc/nginx/sites-available/${CONF_NAME} && \
+                                    ln -sf /etc/nginx/sites-available/${CONF_NAME} /etc/nginx/sites-enabled/${CONF_NAME} && \
+                                    sudo nginx -t && sudo nginx -s reload
+                                """
+                        ),
                                 sshTransfer(
                                     sourceFiles: "${JAR_FILE}",
                                     removePrefix: "target",

@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app:
+    image: localhost:5500/info-storage:latest
+    container_name: info-storage
+    ports:
+      - "8885:8080"
+    environment:
+      # Config app
+      - APP_HEADER=data
+      - APP_CLOUD=store
+      - APP_FREAZ_TAG=freaz
+      - APP_DATA_MAINURL=redis://appuser:uy6zRti2ZCFvjfKk8Eiep@pavuk.mrbag.org:6379/2
+      #Admin
+      - SPRING_BOOT_ADMIN_CLIENT_URL=https://admin.mrbag.org
+      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_SERVICE-URL=https://contact.by.mrbag.org/
+      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_MANAGEMENT-URL=https://contact.by.mrbag.org/actuator
+      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_HEALTH-URL=https://contact.by.mrbag.org/health
+      - SPRING_BOOT_ADMIN_CLIENT_USERNAME=app
+      - SPRING_BOOT_ADMIN_CLIENT_PASSWORD=app-supet-p@22w0rd
