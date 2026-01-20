@@ -1,6 +1,6 @@
 services:
   app:
-    image: localhost:5500/info-storage:latest
+    image: 10.9.0.4:5500/contact:latest
     container_name: info-storage
     ports:
       - "8885:8080"
@@ -17,4 +17,13 @@ services:
       - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_HEALTH-URL=https://contact.by.mrbag.org/health
       - SPRING_BOOT_ADMIN_CLIENT_USERNAME=app
       - SPRING_BOOT_ADMIN_CLIENT_PASSWORD=app-supet-p@22w0rd
-    #restart: # TODO ADD 
+    restart: unless-stopped
+  redis:
+    image: "redis:7"
+    container_name: redis_sonnik
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data: 
