@@ -1,7 +1,8 @@
 package org.mrbag.InfoStorage.Storge;
 
-import org.mrbag.InfoStorage.Util.AppInfo;
+import org.mrbag.InfoStorage.Util.IdUtils;
 
+import io.micrometer.common.lang.NonNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,24 +18,36 @@ public class KeyStore {
 
 	String id;
 
+	/**
+	 * Определеяет, в системе, являеться ли данная запись хранящийся, или нет
+	 * 
+	 * @return true - запись еще не сохраннена.
+	 */
 	public boolean canStore() {
 		return id == null || id.isEmpty();
 	}
 
+	/**
+	 * Проверка коректности данных
+	 * 
+	 * @return результат проверки коректности данных
+	 */
 	public boolean isValid() {
 		return !password.isBlank();
 	}
 
+	/**
+	 * Протая реализация устоновки случайного ключа
+	 * 
+	 * @return результат
+	 */
 	public KeyStore generateId() {
-		if (canStore() && isValid()) {
-			id = IdUtils.generateHashUUID();
-		}
+		id = IdUtils.generateHashUUID();
 		return this;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("%s:%s@%s", AppInfo.getHeader(), id, password);
+	public static KeyStore generate(@NonNull String password) {
+		return new KeyStore(password, IdUtils.generateHashUUID());
 	}
 
 }

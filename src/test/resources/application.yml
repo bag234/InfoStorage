@@ -2,8 +2,23 @@ spring:
   application:
     name: "InfoStorage"
 app:
-  header: "data-test"
-  cloud: "store-test"
   freaz-tag: "freaz"
-  data:
-    mainURI: "redis://172.24.121.136:6379/13"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,loggers,httptrace,threaddump,heapdump
+  endpoint:
+    health:
+      show-details: always
+    env:
+      enabled: true
+    loggers:
+      enabled: true
+    httptrace:
+      enabled: true
+    threaddump:
+      enabled: true
+    heapdump:
+      enabled: true

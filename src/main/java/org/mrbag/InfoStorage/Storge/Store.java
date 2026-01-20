@@ -15,17 +15,16 @@ public class Store {
 	public boolean canExit(KeyStore key) {
 		if (key == null || key.canStore() || !key.isValid())
 			return false;
-		return temp.opsForValue().get(key) != null;
+		return temp.hasKey(key);
 	}
 
 	public KeyStore save(String password, String data) {
 		if (password == null || data == null || password.isEmpty() || data.isEmpty())
 			throw new NullPointerException("Data or password is empty");
-		KeyStore key = KeyStore.builder().password(password).build().generateId();
-		// TODO Exit
+		KeyStore key = KeyStore.generate(password);
+
 		while (canExit(key))
 			key.generateId();
-
 		temp.opsForValue().set(key, data);
 
 		return key;

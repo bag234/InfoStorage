@@ -1,5 +1,8 @@
 package org.mrbag.InfoStorage.Storge.Cloud;
 
+/**
+ * Ошибка, для точной локции именно своих исключений
+ */
 public class CloudExceptionProcess extends Exception {
 
 	public CloudExceptionProcess(String string) {

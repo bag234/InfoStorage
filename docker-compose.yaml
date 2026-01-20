@@ -3,18 +3,16 @@ services:
     image: 10.9.0.4:5500/contact:latest
     container_name: info-storage
     ports:
-      - "8885:8080"
+      - "127.0.0.1:8885:8080"
+      - "10.9.0.1:8885:8080"
     environment:
       # Config app
-      - APP_HEADER=data
-      - APP_CLOUD=store
-      - APP_FREAZ_TAG=freaz
-      - APP_DATA_MAINURL=redis://appuser:uy6zRti2ZCFvjfKk8Eiep@pavuk.mrbag.org:6379/2
+      - APP_DATA_MAINURL=redis://redis:6379/2
       #Admin
-      - SPRING_BOOT_ADMIN_CLIENT_URL=https://admin.mrbag.org
-      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_SERVICE-URL=https://contact.by.mrbag.org/
-      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_MANAGEMENT-URL=https://contact.by.mrbag.org/actuator
-      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_HEALTH-URL=https://contact.by.mrbag.org/health
+      - SPRING_BOOT_ADMIN_CLIENT_URL=http://10.9.0.3:8084
+      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_SERVICE-URL=http://10.9.0.1:8885/
+      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_MANAGEMENT-URL=http://10.9.0.1:8885/actuator
+      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_HEALTH-URL=http://10.9.0.1:8885/health
       - SPRING_BOOT_ADMIN_CLIENT_USERNAME=app
       - SPRING_BOOT_ADMIN_CLIENT_PASSWORD=app-supet-p@22w0rd
     restart: unless-stopped

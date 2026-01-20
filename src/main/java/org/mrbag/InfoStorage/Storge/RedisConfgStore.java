@@ -65,13 +65,11 @@ public class RedisConfgStore {
 		return objectMapper;
 	}
 
-	// TODO Fix date config
 	@Bean
 	public RedisTemplate<CloudKeyStore, String> getTemplateCloudKeyStore(LettuceConnectionFactory let) {
 		RedisTemplate<CloudKeyStore, String> temp = new RedisTemplate<>();
 		temp.setConnectionFactory(let);
-		temp.setKeySerializer(new Jackson2JsonRedisSerializer<>(getMapper(),
-				CloudKeyStore.class));
+		temp.setKeySerializer(new Jackson2JsonRedisSerializer<>(getMapper(), CloudKeyStore.class));
 		temp.setValueSerializer(new StringRedisSerializer());
 
 		return temp;
