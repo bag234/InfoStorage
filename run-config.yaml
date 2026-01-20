@@ -1,0 +1,31 @@
+spring: 
+  boot:
+    admin:
+      client:
+        url: http://172.24.121.136:7701
+        username: test
+        password: test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"   # открыть ВСЕ actuator endpoints
+  endpoint:
+    health:
+      show-details: ALWAYS   # показывать детали health-чеков
+    env:
+      show-values: ALWAYS
+      keys-to-sanitize:
+        - password
+        - secret
+  health:
+    ping:
+      enabled: true
+
+app:
+  header: "data"
+  cloud: "store"
+  freaz-tag: "freaz"
+  data:
+    mainURI: "redis://172.24.121.136:6379/1"

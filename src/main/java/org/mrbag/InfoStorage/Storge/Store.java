@@ -1,36 +1,38 @@
 package org.mrbag.InfoStorage.Storge;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import lombok.NonNull;
 
 @Service
 public class Store {
 
 	@Autowired
-	ReactiveRedisTemplate<String, String> primaryTemplate; 
-	
-	public boolean canExit(KeyAccess key) {
-		if(key == null || key.canStore() || !key.isValid())
+	RedisTemplate<KeyStore, String> temp;
+
+	public boolean canExit(KeyStore key) {
+		if (key == null || key.canStore() || !key.isValid())
 			return false;
-		return primaryTemplate.hasKey(key.toString()).block();
+		return temp.opsForValue().get(key) != null;
 	}
-	
-	public KeyAccess save(String password, String data) {
-		if(password == null || data == null || password.isEmpty() || data.isEmpty()) 
-			throw new NullPointerException("Data is empty");
-		KeyAccess key = KeyAccess.builder().password(password).build().generateId();
-		
-		while(canExit(key)) key.generateId();
-		
-		primaryTemplate.opsForValue().set(key.toString(), data).block();
-		
+
+	public KeyStore save(String password, String data) {
+		if (password == null || data == null || password.isEmpty() || data.isEmpty())
+			throw new NullPointerException("Data or password is empty");
+		KeyStore key = KeyStore.builder().password(password).build().generateId();
+		// TODO Exit
+		while (canExit(key))
+			key.generateId();
+
+		temp.opsForValue().set(key, data);
+
 		return key;
 	}
-	
-	public String load(KeyAccess key) {
-		if (key == null ) throw new NullPointerException("Key must not null");
-		return primaryTemplate.opsForValue().get(key.toString()).block();
+
+	public String load(@NonNull KeyStore key) {
+		return temp.opsForValue().get(key);
 	}
-	
+
 }

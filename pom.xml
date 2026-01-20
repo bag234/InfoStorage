@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.7</version>
+		<version>3.5.8</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.mrbag</groupId>
 	<artifactId>InfoStorage</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<name>InfoStorage</name>
 	<description>Simple universlaStorage for any type information </description>
 	<url />

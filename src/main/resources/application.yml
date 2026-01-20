@@ -4,26 +4,7 @@ spring:
   messages:
     basename: messages
     encoding: UTF-8
-  boot:
-    admin:
-      client:
-        url: http://localhost:8084
-        username: test
-        password: test
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"   # открыть ВСЕ actuator endpoints
-  endpoint:
-    health:
-      show-details: ALWAYS   # показывать детали health-чеков
-  health:
-    diskspace:
-      enabled: true
-    ping:
-      enabled: true
       
 app:
   header: "data"

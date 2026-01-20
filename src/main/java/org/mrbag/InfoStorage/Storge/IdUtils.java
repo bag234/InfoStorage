@@ -9,18 +9,17 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class IdUtils {
 
-	static MessageDigest md; 
+	static MessageDigest md;
 	static {
 		try {
 			md = MessageDigest.getInstance("SHA-1");
 		} catch (NoSuchAlgorithmException e) {
-			while(true) {
+			while (true) {
 				System.err.println("fatal algoritm");
 			}
 		}
 	}
-	
-	
+
 	public static String generateSimpleId() {
 		try {
 			return Long.toString(ThreadLocalRandom.current().nextLong(), 36).substring(10);
@@ -28,11 +27,12 @@ public final class IdUtils {
 			return generateSimpleId();
 		}
 	}
-	
+
 	public static String generateHashUUID() {
+		// TODO Rewrite
 		return new BigInteger(1, md.digest(UUID.randomUUID().toString().getBytes())).toString(36).substring(0, 10);
 	}
-	
+
 	public static void main(String[] args) {
 		HashSet<String> set = new HashSet<String>();
 		int col = 0;
@@ -44,5 +44,5 @@ public final class IdUtils {
 		}
 		System.out.println(col);
 	}
-	
+
 }
