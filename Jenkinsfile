@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REGISTRY = "10.13.4.165:5500"
-        IMAGE_NAME = ""
+        IMAGE_NAME = "contact"
         IMAGE_TAG = "latest"
 
         REPO_URL = "git@github.com:bag234/InfoStorage.git"
