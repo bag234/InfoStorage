@@ -5,7 +5,25 @@ spring:
     basename: messages
     encoding: UTF-8
 
-      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,loggers,httptrace,threaddump,heapdump
+  endpoint:
+    health:
+      show-details: always
+    env:
+      enabled: true
+    loggers:
+      enabled: true
+    httptrace:
+      enabled: true
+    threaddump:
+      enabled: true
+    heapdump:
+      enabled: true
+
 app:
   data:
     mainURI: "redis://172.24.121.136:6379/1"
