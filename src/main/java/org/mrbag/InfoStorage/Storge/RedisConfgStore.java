@@ -22,7 +22,7 @@ public class RedisConfgStore {
 
 	@SuppressWarnings("deprecation")
 	@Bean(name = "MainStorageConfig")
-	public RedisStandaloneConfiguration mainStorage(@Value("${app.data.mainURI}") String url) {
+	public RedisStandaloneConfiguration mainStorage(@Value("${app.data.mainuri}") String url) {
 		RedisURI uri = RedisURI.create(url);
 		RedisStandaloneConfiguration conf = new RedisStandaloneConfiguration();
 		conf.setDatabase(uri.getDatabase());

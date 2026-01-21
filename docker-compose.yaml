@@ -7,12 +7,12 @@ services:
       - "10.9.0.1:8885:8080"
     environment:
       # Config app
-      - APP_DATA_MAINURL=redis://redis:6379/2
+      - APP_DATA_MAINURI=redis://redis:6379/2
       #Admin
       - SPRING_BOOT_ADMIN_CLIENT_URL=http://10.9.0.3:8084
       - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_SERVICE-URL=http://10.9.0.1:8885/
       - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_MANAGEMENT-URL=http://10.9.0.1:8885/actuator
-      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_HEALTH-URL=http://10.9.0.1:8885/health
+      - SPRING_BOOT_ADMIN_CLIENT_INSTANCE_HEALTH-URL=http://10.9.0.1:8885/actuator/health
       - SPRING_BOOT_ADMIN_CLIENT_USERNAME=app
       - SPRING_BOOT_ADMIN_CLIENT_PASSWORD=app-supet-p@22w0rd
     restart: unless-stopped
@@ -24,4 +24,4 @@ services:
       - redis-data:/data
 
 volumes:
-  redis-data: 
+  redis-data:
