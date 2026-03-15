@@ -49,7 +49,7 @@ pipeline {
                             sourceFiles: "docker-compose.yaml",
                             remoteDirectory: "${REMOTE_DIR}",
                             execCommand: """
-                                mkdir -p ${REMOTE_DIR} && cd ${REMOTE_DIR} && docker compose pull &&  docker compose up -d --force-recreate
+                                mkdir -p ${REMOTE_DIR} && cd ${REMOTE_DIR} && wget -O jsonlog.xml https://raw.githubusercontent.com/bag234/Configs/refs/heads/main/jsonlog.xml && docker compose pull &&  docker compose up -d --force-recreate
                             """
                         ),
                         sshTransfer(
