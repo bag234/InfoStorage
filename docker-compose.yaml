@@ -18,7 +18,7 @@ services:
       - SPRING_BOOT_ADMIN_CLIENT_USERNAME=app
       - SPRING_BOOT_ADMIN_CLIENT_PASSWORD=app-supet-p@22w0rd
     restart: unless-stopped
-    volume: 
+    volumes: 
       - ./jsonlog.xml:/conf/json.xml:ro
 
   redis:
